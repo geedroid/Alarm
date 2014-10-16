@@ -1,18 +1,21 @@
-package org.paradrops.alarm;
+package org.paradrops.alarm.Activities;
 
 import android.app.Activity;
-import android.app.ActionBar;
-import android.app.Fragment;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.os.Build;
+
+import org.androidannotations.annotations.EActivity;
+import org.paradrops.alarm.R;
+import org.paradrops.alarm.fragments.MainFragment;
+import org.paradrops.alarm.services.AlarmService;
 
 
-
+@EActivity
 public class MainActivity extends Activity {
 
     @Override
@@ -21,9 +24,11 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
+                    .add(R.id.container, new MainFragment())
                     .commit();
         }
+
+        scheduleService();
     }
 
 
@@ -46,19 +51,22 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
+    void scheduleService(){
+        Context context = getApplicationContext();
 
-        public PlaceholderFragment() {
-        }
+        Intent intent = new Intent(context, AlarmService.class);
+        PendingIntent pendingIntent =
+                PendingIntent.getService(
+                context,
+                -1,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
 
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            return rootView;
-        }
+        AlarmManager alarmManager = (AlarmManager)context.getSystemService(ALARM_SERVICE);
+        alarmManager.setInexactRepeating(
+                AlarmManager.RTC,
+                System.currentTimeMillis(),
+                5000,
+                pendingIntent);
     }
 }
