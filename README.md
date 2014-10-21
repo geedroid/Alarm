@@ -1,8 +1,5 @@
-# これは何？
-アラームアプリのサンプルアプリです。
+# アラームアプリのサンプル[WIP]
 
 # 環境
-Android4.0以上対象
-AndroidAnnotations使用
-
-#
+- Android4.0以上対象
+- AndroidAnnotations使用
