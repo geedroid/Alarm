@@ -4,6 +4,9 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.util.Log;
 
+import org.androidannotations.annotations.EIntentService;
+
+@EIntentService
 public class AlarmService extends IntentService {
 
     public AlarmService() {
